@@ -1,19 +1,20 @@
 import logging
 import traceback
-from datetime import datetime, date
+from datetime import date #, datetime
 from getpass import getpass
 from save_money.services import SaveMoneyService
-from save_money.models import UserAuth, Token, Movimentation
+from save_money.models import UserAuth, Movimentation
 import config
 
 
 class Integrator:
 
     def __init__(self):
+        self.categories = []
         self.sm_service = SaveMoneyService()
         try:
             self.compose()
-        except Exception as e:
+        except:
             logging.error(traceback.format_exc())
             raise
 
@@ -30,15 +31,15 @@ class Integrator:
 
     def get_token(self):
         user = self.get_user_auth()
-        logging.info(f"Get auth to {user.username}")
+        logging.info('Get auth to %s', user.username)
         token = self.sm_service.get_token(user)
         self.sm_service.set_authorization(jwt='Bearer '+ token.access_token)
 
     def get_categories(self):
-        self.categories = self.sm_service.get_categories()
-        print(self.categories)
-        logging.info(f"Get {len(self.categories)} Categories")
-    
+        categories = self.sm_service.get_categories()
+        self.categories = {c.category_type: c for c in categories}
+        logging.info('Get %i Categories', len(self.categories))
+
     def read_nu_movimentations(self):
         logging.info('Read movimentations on nubank')
         return [Movimentation(
@@ -46,16 +47,16 @@ class Integrator:
             title='Pizza',
             value=5.00,
             description='',
-            category=8,
+            category=self.categories['food'].id,
             number_of_installments=1,
             efetivation_date=date.today(),
             tags=['NuBank']
         )]
 
     def save_movimentations(self, movimentations):
-        # TODO: create route to save list of movimentations 
+        # TODO: create route to save list of movimentations
         for movimentation in movimentations:
-            logging.info(f"Save {movimentation.title}")
+            logging.info('Save %s', movimentation.title)
             self.sm_service.create_movimentation(movimentation)
 
 if __name__ == '__main__':
@@ -65,4 +66,4 @@ if __name__ == '__main__':
         datefmt='%d/%m/%y %H:%M',
         level=logging.INFO
     )
-    Integrator()    
+    Integrator()
