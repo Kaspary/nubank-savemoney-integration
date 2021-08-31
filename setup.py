@@ -36,6 +36,7 @@ class Integrator:
 
     def get_categories(self):
         self.categories = self.sm_service.get_categories()
+        print(self.categories)
         logging.info(f"Get {len(self.categories)} Categories")
     
     def read_nu_movimentations(self):
@@ -44,8 +45,8 @@ class Integrator:
             is_expense=True,
             title='Pizza',
             value=5.00,
-            description='Pizza do di minas',
-            category=1,
+            description='',
+            category=8,
             number_of_installments=1,
             efetivation_date=date.today(),
             tags=['NuBank']
