@@ -1,0 +1,5 @@
+from decouple import config
+
+SAVE_MONEY_API_HOST = config('SAVE_MONEY_API_HOST')
+SAVE_MONEY_USERNAME = config('SAVE_MONEY_USERNAME', None)
+SAVE_MONEY_PASSWORD = config('SAVE_MONEY_PASSWORD', None)
