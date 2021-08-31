@@ -3,6 +3,7 @@ from requests import request, HTTPError
 from save_money.models import Category, Token
 import config
 
+
 class SaveMoneyService:
 
     API_HOST = config.SAVE_MONEY_API_HOST

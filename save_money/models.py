@@ -2,6 +2,7 @@ from datetime import date
 from dataclasses import dataclass
 from typing import List
 
+
 @dataclass
 class UserAuth:
     username: str
